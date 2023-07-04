@@ -1,0 +1,81 @@
+#include<stdio.h>
+typedef struct {
+    int processID;
+    int burstTime;
+    int arrivalTime;
+    int waitingTime;
+    int turnaroundTime;
+} Process;
+void calculateTimes(Process processes[], int n) {
+    int totalWaitingTime = 0;
+    int totalTurnaroundTime = 0;
+    processes[0].waitingTime = 0;
+    processes[0].turnaroundTime = processes[0].burstTime;
+    
+    for (int i = 1; i < n; i++) {
+        int totalBurstTime = 0;
+        for (int j = 0; j < i; j++) {
+            totalBurstTime += processes[j].burstTime;
+        }
+        
+        processes[i].waitingTime = totalBurstTime - processes[i].arrivalTime;
+        if (processes[i].waitingTime < 0)
+            processes[i].waitingTime = 0;
+        
+        processes[i].turnaroundTime = processes[i].waitingTime + processes[i].burstTime;
+        
+        totalWaitingTime += processes[i].waitingTime;
+        totalTurnaroundTime += processes[i].turnaroundTime;
+    }
+    double avgWaitingTime = (double) totalWaitingTime / n;
+    double avgTurnaroundTime = (double) totalTurnaroundTime / n;
+    
+    printf("\nProcess\tBurst Time\tArrival Time\tWaiting Time\tTurnaround Time\n");
+    
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t%d\t\t%d\t\t%d\n", processes[i].processID, processes[i].burstTime, processes[i].arrivalTime, processes[i].waitingTime, processes[i].turnaroundTime);
+    }
+    
+    printf("\nAverage Waiting Time: %.2lf\n", avgWaitingTime);
+    printf("Average Turnaround Time: %.2lf\n", avgTurnaroundTime);
+}
+void sortProcesses(Process processes[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        
+        for (int j = i + 1; j < n; j++) {
+            if (processes[j].burstTime < processes[minIndex].burstTime) {
+                minIndex = j;
+            }
+        }
+        
+        if (minIndex != i) {
+            Process temp = processes[i];
+            processes[i] = processes[minIndex];
+            processes[minIndex] = temp;
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+    
+    Process processes[n];
+    printf("\nEnter burst time and arrival time for each process:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Process %d\n", i + 1);
+        printf("Burst Time: ");
+        scanf("%d", &processes[i].burstTime);
+        printf("Arrival Time: ");
+        scanf("%d", &processes[i].arrivalTime);
+        processes[i].processID = i + 1;
+    }
+    sortProcesses(processes, n);
+    calculateTimes(processes, n);
+    
+    return 0;
+}
+
+

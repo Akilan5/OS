@@ -1,0 +1,10 @@
+echo "Enter a string"
+read string
+echo "Enter a substring to search ;"
+read substring
+if [[ $string == *$substring* ]]
+then
+echo "substring found in the string"
+else
+echo "substring not found in the string"
+fi

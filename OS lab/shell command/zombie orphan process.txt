@@ -1,0 +1,23 @@
+
+#include <stdio.h>
+
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid;
+    pid = fork();
+    if (pid == 0) {
+        printf("This is the child process\n");
+        sleep(5);
+        printf("Child process is exiting\n");
+        exit(0);
+    } else {
+        printf("This is the parent process\n");
+        printf("Parent process is sleeping\n");
+        sleep(10);
+        printf("Parent process is exiting\n");
+    }
+    return 0;
+}

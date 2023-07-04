@@ -1,0 +1,12 @@
+echo "Appending text to a file"
+echo "Enter file name to append: "
+read filename
+if [ -f $filename ]
+then
+    echo "Enter text to append: "
+    read text
+    echo $text >> $filename
+    echo "Text appended successfully to $filename"
+else
+    echo "$filename doesn't exist"
+fi
